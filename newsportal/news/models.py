@@ -8,15 +8,19 @@ class User(User):
     """Таблица о пользователях"""
     pass
 
+
 class Category(models.Model):
     """Таблица категорий"""
     name = models.CharField(max_length=100)
-news = 'NS'
-art = 'AT'
-blank = [(news, 'новость'),
-         (art, 'статья')]
+
+
+
 class Post(models.Model):
     """Таблица о постах"""
+    news = 'NS'
+    art = 'AT'
+    blank = [(news, 'новость'),
+             (art, 'статья')]
     author = models.ForeignKey('Author', on_delete=models.CASCADE)
     type = models.CharField(max_length=2, choices=blank, default='NS')
     title = models.CharField(max_length=100)
@@ -27,7 +31,12 @@ class Post(models.Model):
 
 
     def __str__(self):
-        return f' Дата: {self.data} | Заголовок: {self.title} | Автор:{self.author} | Рейтинг:{self.rating}'
+        format_string = '%d.%m.%Y: %H:%M'
+        return (f' Дата: {self.data.strftime(format_string)}'
+                f'| Заголовок: {self.title} '
+                f'| Автор:{self.author} '
+                f'| Рейтинг:{self.rating}')
+
 
     def like(self):
         self.rating += 1
@@ -40,10 +49,12 @@ class Post(models.Model):
     def preview(self):
         return f'{self.content[:124]}...'
 
+
 class PostCategory(models.Model):
     '''Таблица категорий с постами'''
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
+
 
 class Comment(models.Model):
     """Таблица комментарий"""
@@ -54,7 +65,8 @@ class Comment(models.Model):
     rating = models.IntegerField(default=0)
 
     def __str__(self):
-        return f' Date:{self.data} | User:{self.user} | rating:{self.rating}  | comment:{self.content[:64]}...'
+        format_string = '%d.%m.%Y: %H:%M'
+        return f' Date:{self.data.strftime(format_string)} | User:{self.user} | rating:{self.rating}  | comment:{self.content[:64]}...'
 
     def like(self):
         self.rating += 1
@@ -73,7 +85,6 @@ class Author(models.Model):
 
     def __str__(self):
         return f'{User.objects.get(pk=self.name.pk)}'
-
 
     def update_rating(self):
         posts = Post.objects.filter(author_id = self.pk)
