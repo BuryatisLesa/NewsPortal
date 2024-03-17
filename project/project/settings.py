@@ -37,10 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'simpleapp',
     'django.contrib.sites',
     'django.contrib.flatpages',
     'fpages',
+    'django_filters'
 ]
 SITE_ID = 1
 
