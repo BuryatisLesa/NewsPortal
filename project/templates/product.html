@@ -1,10 +1,13 @@
 {% extends 'flatpages/default.html' %}
-
+{% load custom_filters %}
 {% block title %}
 Product
 {% endblock title %}
 
 {% block content %}
-<h1>{{ Name }}</h1>
-{{ product }}
+<h1>Продукт: {{ product.name }}</h1> <h2>цена: {{ product.price|currency }}</h2>
+<hr>
+<h3>Категория: {{ product.category }}</h3>
+
+ <h3>Описание: {{ product.description }}</h3>
 {% endblock content %}
